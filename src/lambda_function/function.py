@@ -7,7 +7,7 @@ import os
 from boto3.dynamodb.types import Binary, TypeDeserializer
 
 delivery_stream_name = os.environ['DELIVERY_STREAM_NAME']
-dynamodb_image_type = 'NewImage' if os.environ.get('DYNAMNODB_IMAGE_TYPE', 'NEW_IMAGE') == 'NEW_IMAGE' else 'OldImage'
+dynamodb_image_type = os.environ.get('DYNAMNODB_IMAGE_TYPE', 'NewImage')
 firehose = boto3.client('firehose')
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

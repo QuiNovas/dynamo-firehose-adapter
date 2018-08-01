@@ -4,7 +4,7 @@ Note - this works best with larger "chunks" from the DynamoDB stream, as the ada
 
 # Environment Variables:
 - **DELIVERY_STREAM_NAME** The name of the Kinesis Firehose to deliver the DynamoDB records to
-- **DYNAMNODB_IMAGE_TYPE** Can either be `NEW_IMAGE` or `OLD_IMAGE`. This corresponds to the records in the DynamoDB Stream
+- **DYNAMNODB_IMAGE_TYPE** Can either be `NewImage` or `OldImage`. This corresponds to the records in the DynamoDB Stream
 
 # Handler Method
 function.handler
