@@ -9,4 +9,7 @@ Note - this works best with larger "chunks" from the DynamoDB stream, as the ada
 # Handler Method
 function.handler
 
+# Lambda package location
+https://s3.amazonaws.com/lambdalambdalambda-repo/quinovas/dynamo-firehose-adapter/dynamo-firehose-adapter-0.0.1.zip
+
 

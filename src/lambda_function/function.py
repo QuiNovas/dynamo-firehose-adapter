@@ -53,7 +53,7 @@ def create_kinesis_batches(dynamodb_records):
             image = {
                 k: type_deserializer.deserialize(v) for k, v in dynamodb_record['dynamodb'][dynamodb_image_type].items()
             }
-            data = json.dumps(image, separators=(',', ':'), cls=DynamoDBEncoder)
+            data = json.dumps(image, separators=(',', ':'), cls=DynamoDBEncoder) + '\n'
             total_length += len(data)
             if total_length >= 4194304:
                 break
