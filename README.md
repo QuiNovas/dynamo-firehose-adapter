@@ -4,12 +4,13 @@ Note - this works best with larger "chunks" from the DynamoDB stream, as the ada
 
 # Environment Variables:
 - **DELIVERY_STREAM_NAME** The name of the Kinesis Firehose to deliver the DynamoDB records to
-- **DYNAMNODB_IMAGE_TYPE** Can either be `NewImage` or `OldImage`. This corresponds to the records in the DynamoDB Stream
+- **DYNAMNODB_IMAGE_TYPE** Can either be `NewImage` or `OldImage`. This corresponds to the records in the DynamoDB Stream. Defaults to `NewImage`
+- **LOGGING_LEVEL** One of `DEBUG`, `INFO`, `WARNING`, `ERROR` or `CRITICAL`. Defaults to `INFO`
 
 # Handler Method
 function.handler
 
 # Lambda package location
-https://s3.amazonaws.com/lambdalambdalambda-repo/quinovas/dynamo-firehose-adapter/dynamo-firehose-adapter-0.0.1.zip
+https://s3.amazonaws.com/lambdalambdalambda-repo/quinovas/dynamo-firehose-adapter/dynamo-firehose-adapter-1.0.0.zip
 
 
