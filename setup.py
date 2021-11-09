@@ -15,7 +15,7 @@ lambda_name = 'dynamo-firehose-adapter'
 # Versions should comply with PEP440.  For a discussion on single-sourcing
 # the version across setup.py and the project code, see
 # https://packaging.python.org/en/latest/single_source_version.html
-lambda_version = '1.0.0'
+lambda_version = '1.0.1'
 
 lambda_description = 'Lambda that reads from a DynamoDB Stream and forwards items to a Kinesis Firehose'
 
@@ -85,4 +85,6 @@ setup(
     lambda_package='src/lambda_function',
 
     setup_requires=['lambda-setuptools'],
+
+    python_requires=">=3.9",
 )
