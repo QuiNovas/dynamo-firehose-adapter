@@ -2,15 +2,21 @@ import json
 from decimal import Decimal
 from logging import INFO, getLogger
 from os import environ
-from typing import Any, Dict, List
+from typing import TYPE_CHECKING, Any
 
 from boto3 import client
 from boto3.dynamodb.types import Binary, TypeDeserializer
 
+if TYPE_CHECKING:
+    from mypy_boto3_firehose.client import FirehoseClient
+else:
+    FirehoseClient = object
+
+getLogger().setLevel(environ.get("LOGGING_LEVEL") or INFO)
+
 DELIVERY_STREAM_NAME = environ["DELIVERY_STREAM_NAME"]
 DYNAMODB_IMAGE_TYPE = environ.get("DYNAMNODB_IMAGE_TYPE", "NewImage")
 FIREHOSE = client("firehose")
-getLogger().setLevel(environ.get("LOGGING_LEVEL") or INFO)
 
 
 class DynamoDBEncoder(json.JSONEncoder):
@@ -25,25 +31,26 @@ class DynamoDBEncoder(json.JSONEncoder):
 DESERIALIZER = TypeDeserializer()
 
 
-def handler(event: Dict[str, Any], context):
+def handler(event: dict[str, Any], context):
 
     getLogger().debug("Processing event {}".format(json.dumps(event)))
 
     if (records := event.get("Records")) and len(records):
-        map(put_records_batch, create_kinesis_batches(records))
+        for batch in create_kinesis_batches(records):
+            put_records_batch(batch)
 
     return event
 
 
-def create_kinesis_batches(dynamodb_records) -> List[List[Dict[str, str]]]:
+def create_kinesis_batches(dynamodb_records) -> list[list[dict[str, str]]]:
     if not dynamodb_records or not len(dynamodb_records):
         return []
     kinesis_records = []
     count = 0
     total_length = 0
     for dynamodb_record in dynamodb_records:
-        image: Dict[str, Any] = None
-        dynamodb: Dict[str, Any] = dynamodb_record["dynamodb"]
+        image: dict[str, Any] = None
+        dynamodb: dict[str, Any] = dynamodb_record["dynamodb"]
         if image := dynamodb.get(DYNAMODB_IMAGE_TYPE):
             data = (
                 json.dumps(
@@ -63,7 +70,7 @@ def create_kinesis_batches(dynamodb_records) -> List[List[Dict[str, str]]]:
     return [kinesis_records] + create_kinesis_batches(dynamodb_records[count:])
 
 
-def put_records_batch(batch):
+def put_records_batch(batch: list[dict[str, str]]) -> None:
     if not batch:
         return
     response = FIREHOSE.put_record_batch(
